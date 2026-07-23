@@ -1,0 +1,85 @@
+# Sample config for the pseudo-code-agent skill.
+# Copy to pca/config.yaml and edit for your repo.
+# Schema documented in references/template-schema.md.
+
+dirs:
+  annotated: pca/annotated
+  pseudo: pca/pseudo
+  logs: pca/logs
+  changes: openspec/changes
+
+# Two INDEPENDENT templates:
+#   annotate.template   (T_annotate) — the query schema for Op1; drives L1
+#                        (per-function marked comments) and the per-file spec.
+#   pseudocode.template (T_pseudo)    — the query schema for Op2; drives L2
+#                        (human-readable pseudo-code, the steering surface).
+# Each has its own marker (shared), sections, and drift hash. T_pseudo's
+# sections need NOT match T_annotate's. Either inline `sections` (as below) or
+# `file: ./path/to/template.yaml`.
+annotate:
+  template:
+    marker: "@pca"
+    sections:
+      - name: PURPOSE
+        prompt: "What is the primary responsibility of this code?"
+      - name: DEPENDS_ON
+        prompt: "What does this code depend on externally, and why?"
+      - name: BEHAVIOR
+        prompt: "What does this code do, step by step?"
+      - name: INVARIANTS
+        prompt: "What conditions must always hold for this code to be correct?"
+      - name: EDGE_CASES
+        prompt: "What boundary and error cases does this code handle?"
+
+pseudocode:
+  template:
+    marker: "@pca"
+    sections:
+      - name: BEHAVIOR
+        prompt: "What does this code do, step by step?"
+
+# Non-function files: files with zero discoverable functions are REFUSED by
+# default. List gitignore-style globs here to opt files into whole-file
+# annotation (one @pca BEGIN ANNOTATION block for the entire file). Useful for
+# config files, SQL migrations, constants modules.
+wholeFile:
+  - "migrations/*.sql"
+  # - "config/*.yaml"
+
+# Language + comment-type mapping. STRICT: files whose extension has no
+# entry are REFUSED (no silent default fallback). Add every extension your
+# repo uses. `comment` is "line" or "block".
+# `symbolRule` (optional) is a prose instruction the LLM uses to FILTER its
+# function discovery — e.g. "exclude arrow-const exports" or "only top-level
+# functions, not nested closures". It is NOT a regex discoverer; discovery is
+# LLM-primary with widest coverage by default.
+languages:
+  .ts:
+    language: typescript
+    comment: line
+    # symbolRule: "exclude arrow-const exports"
+  .tsx:
+    language: typescript
+    comment: line
+  .js:
+    language: javascript
+    comment: line
+  .jsx:
+    language: javascript
+    comment: line
+  .py:
+    language: python
+    comment: line
+  .go:
+    language: go
+    comment: line
+  .rs:
+    language: rust
+    comment: line
+  .sql:
+    language: sql
+    comment: line
+  .sh:
+    language: shell
+    comment: line
+  # No "default" entry — unmapped extensions are refused.

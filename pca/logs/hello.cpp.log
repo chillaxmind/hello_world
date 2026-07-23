@@ -1,0 +1,46 @@
+--- UNDERSTANDING 2026-07-23T19:04:21Z ---
+### FN: hello_world
+Read L0 (hello.cpp:4-6) and the capability spec. hello_world is a void, no-arg
+function whose body is a single std::cout << "Hello World from Python caller!"
+<< std::endl statement. PURPOSE: emit the canonical greeting that Python calls
+through the binding. DEPENDS_ON: <iostream> (std::cout, std::endl); callable
+from Python via the registration in hello_world_module. BEHAVIOR: write the
+fixed string, then a newline (endl flushes), return void. INVARIANTS: exactly
+one fixed line per call; deterministic; idempotent; no side effects beyond
+stdout. EDGE_CASES: stdout failures set iostream error state but are unchecked;
+no input to validate; repeated calls repeat the line. Understanding is
+sufficient to write requirements + scenarios.
+
+### FN: main
+Read L0 (hello.cpp:8-13). main is the native entry point: signature int main()
+(no argc/argv), body prints "Hello World!" to std::cout with endl, then returns
+0. PURPOSE: standalone executable greeting reporting success. DEPENDS_ON:
+<iostream>; invoked by the C++ runtime when built/run as an executable;
+independent of the pybind11 binding (not exposed to Python). BEHAVIOR: print
+"Hello World!", newline, return 0. INVARIANTS: always returns 0; emits exactly
+one line; accepts no command-line arguments. EDGE_CASES: no argument
+validation; stdout failures unchecked; when built as a Python extension, main
+is typically not invoked and may be excluded by the pybind11 build; no error
+paths. Understanding is sufficient.
+
+### FN: hello_world_module
+Read L0 (hello.cpp:15-18). PYBIND11_MODULE(hello_world, m) is a macro that
+expands to the PyInit_hello_world module-init function; body sets m.doc() =
+"Hello World" and registers m.def("hello_world", &hello_world, "Hello World").
+Named the symbol hello_world_module for a clean, collision-free pseudo-anchor
+distinct from the hello_world function. PURPOSE: register the Python extension
+module hello_world, exposing the C++ hello_world() under attribute hello_world.
+DEPENDS_ON: <pybind11/pybind11.h> (PYBIND11_MODULE macro, module_ API); the C++
+hello_world function by address (&hello_world); the Python C-API runtime at
+import time. BEHAVIOR: macro expands to PyInit_hello_world; on import, set
+docstring "Hello World"; register attribute hello_world -> &hello_world with
+help "Hello World"; return the module object. INVARIANTS: the module name arg
+("hello_world") must match the importable Python module name (build target) —
+the cross-file naming contract with hello.py; the attribute "hello_world" must
+map to &hello_world; registration is once per import; main is NOT exposed
+(binding surface is exactly { hello_world }). EDGE_CASES: build target name !=
+hello_world -> import hello_world fails with ModuleNotFoundError; no error
+handling in the block -> registration errors propagate as C-API exceptions at
+import time; &hello_world unavailable at link -> build fails (link-time). 
+Understanding is sufficient.
+--- PSEUDOCODE 2026-07-23T19:14:19Z ---

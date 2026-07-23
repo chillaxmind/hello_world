@@ -1,0 +1,13 @@
+{
+  "name": "pseudo-code-agent-scripts",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Helper scripts for the pseudo-code-agent Pi skill.",
+  "type": "module",
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9"
+  }
+}

@@ -1,0 +1,58 @@
+# pca/config.yaml — pseudo-code-agent config for this repo.
+# Schema: .pi/skills/pseudo-code-agent/references/template-schema.md
+#
+# The pca/ directory is committed to git in full (config, manifest, annotated,
+# pseudo, logs). Do NOT add pca/ to .gitignore.
+
+dirs:
+  annotated: pca/annotated
+  pseudo: pca/pseudo
+  logs: pca/logs
+  changes: openspec/changes
+
+# Two INDEPENDENT templates:
+#   annotate.template   (T_annotate) — query schema for Op1; drives L1
+#                        (per-function marker-prefixed comments) and the
+#                        per-file spec (which mirrors T_annotate).
+#   pseudocode.template (T_pseudo)    — query schema for Op2; drives L2
+#                        (human-readable pseudo-code, the steering surface).
+# T_pseudo's sections need NOT match T_annotate's. Each has its own drift hash.
+annotate:
+  template:
+    marker: "@pca"
+    sections:
+      - name: PURPOSE
+        prompt: "What is the primary responsibility of this code?"
+      - name: DEPENDS_ON
+        prompt: "What does this code depend on externally, and why?"
+      - name: BEHAVIOR
+        prompt: "What does this code do, step by step?"
+      - name: INVARIANTS
+        # What conditions must always hold true for this code to be correct?
+        prompt: "What conditions must always hold true for correctness?"
+      - name: EDGE_CASES
+        prompt: "What boundary and error cases does this code handle, and how?"
+
+pseudocode:
+  template:
+    marker: "@pca"
+    sections:
+      - name: BEHAVIOR
+        prompt: "What does this code do, step by step?"
+
+# Files with zero discoverable functions are REFUSED by default. List
+# gitignore-style globs here to opt files into whole-file annotation (one
+# @pca BEGIN ANNOTATION block for the entire file). Both repo files have
+# discoverable functions, so this stays empty for now.
+wholeFile: []
+
+# STRICT extension -> {language, comment} mapping. Files whose extension has
+# no entry are REFUSED (no silent default fallback). `comment` is "line" or
+# "block". Add every extension this repo uses.
+languages:
+  .cpp:
+    language: cpp
+    comment: line
+  .py:
+    language: python
+    comment: line

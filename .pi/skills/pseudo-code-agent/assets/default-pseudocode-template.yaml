@@ -1,0 +1,18 @@
+# Default PSEUDOCODE template (T_pseudo) for the pseudo-code-agent skill.
+# This is the query schema for Op2 (pseudocode): each section's `prompt` drives
+# what gets rendered into L2 (human-readable pseudo-code). L2 is the human
+# steering surface for intent.
+#
+# By default only BEHAVIOR is rendered into L2 — a lean, behavior-focused
+# surface. A human who wants to steer other concerns (e.g. invariants) can add
+# sections here. T_pseudo is INDEPENDENT of T_annotate: its sections need NOT
+# match T_annotate's section names. Op3 ABSORB uses LLM inference (not
+# template-section name identity) to map L2 edits back to spec sections.
+#
+# See references/template-schema.md.
+
+marker: "@pca"
+
+sections:
+  - name: BEHAVIOR
+    prompt: "What does this code do, step by step?"

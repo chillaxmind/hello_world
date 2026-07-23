@@ -1,0 +1,24 @@
+--- UNDERSTANDING 2026-07-23T19:09:45Z ---
+### FN: __main__
+Read L0 (hello.py:1-4) and the capability spec; cross-referenced hello.cpp's
+PYBIND11_MODULE(hello_world, m) which registers attribute hello_world -> C++
+hello_world(). The file has no def/lambda; the unit of behavior is the
+if __name__ == "__main__": guard block, named __main__ for a clean
+collision-free pseudo-anchor (direct analog of main() in hello.cpp). PURPOSE:
+script entry point — exercise the bridge by importing the bound C++ module and
+invoking its greeting. DEPENDS_ON: the importable hello_world extension (built
+from hello.cpp via pybind11) and its attribute hello_world (the C++
+hello_world() function); must be on sys.path. BEHAVIOR: import hello_world
+(line 1, always runs); when __name__ == "__main__", call
+hello_world.hello_world(), which prints "Hello World from Python caller!" via
+the C++ function; exit 0 (no explicit sys.exit). INVARIANTS: guard runs only
+when hello.py is the entry module, never on import; the line-1 import always
+runs; the call takes no args and consumes no return value; the module name
+hello_world must match the PYBIND11_MODULE name and build target (cross-file
+naming contract). EDGE_CASES: extension missing/not on sys.path -> ImportError
+or ModuleNotFoundError at line 1 before the guard; extension lacks attribute
+hello_world -> AttributeError at the call; no error handling, failures
+propagate as uncaught exceptions; python hello.py and python -m hello both
+trigger the guard, importing as a module does not. Understanding is sufficient
+to write requirements + scenarios.
+--- PSEUDOCODE 2026-07-23T19:20:08Z ---

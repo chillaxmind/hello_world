@@ -1,0 +1,27 @@
+# Default ANNOTATE template (T_annotate) for the pseudo-code-agent skill.
+# This is the query schema for Op1 (annotate): each section's `prompt` is asked
+# about the code; the answer is written into L1 (per-function marker-prefixed
+# comments) and distilled into the paired per-file spec. The per-file spec
+# mirrors T_annotate's shape. Humans steer what understanding gets captured by
+# editing these prompts. See references/template-schema.md.
+#
+# This template is INDEPENDENT of the pseudocode template (T_pseudo). The two
+# evolve separately and have separate drift hashes in the manifest.
+
+marker: "@pca"
+
+sections:
+  - name: PURPOSE
+    prompt: "What is the primary responsibility of this code?"
+
+  - name: DEPENDS_ON
+    prompt: "What does this code depend on externally, and why?"
+
+  - name: BEHAVIOR
+    prompt: "What does this code do, step by step?"
+
+  - name: INVARIANTS
+    prompt: "What conditions must always hold true for this code to be correct?"
+
+  - name: EDGE_CASES
+    prompt: "What boundary and error cases does this code handle, and how?"

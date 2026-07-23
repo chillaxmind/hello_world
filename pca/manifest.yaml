@@ -1,0 +1,58 @@
+capabilities:
+  hello-world-bridge:
+    spec: openspec/specs/hello-world-bridge.spec.md
+    members:
+      - hello.cpp
+      - hello.py
+    memberSpecHashes: {}
+entries:
+  - id: hello.cpp
+    original: hello.cpp
+    annotated: pca/annotated/hello.cpp
+    log: pca/logs/hello.cpp.log
+    pseudo: pca/pseudo/hello.cpp.md
+    spec: openspec/specs/hello-world-bridge/hello.cpp.spec.md
+    capabilities:
+      - hello-world-bridge
+    mode: auto
+    symbols:
+      hello_world:
+        pseudoAnchor: '## hello_world'
+        markerLine: 4
+      main:
+        pseudoAnchor: '## main'
+        markerLine: 20
+      hello_world_module:
+        pseudoAnchor: '## hello_world_module'
+        markerLine: 39
+    provisional: []
+    hashes:
+      original: sha256:67f7e37a21e7d4e8b57f25555f18011396aa5c455025f151710f4c4590800643
+      annotated: sha256:c25ea51d89da1e05a8b3ca1b8412335aea1d83eac67deb47afab9f87e7b32b83
+    annotateTemplateHash: sha256:8e98c0692f67d88f56461f4d87f5d933cbb756d91cef714ed3c8798acf0fa0f3
+    lastOp: pseudocode
+    syncedAt: '2026-07-23T19:14:19Z'
+    pendingChange: null
+    pseudocodeTemplateHash: sha256:0807114495d0087ebd2737cbd63bc3661339a841c8006a0bd7bdada72f323a9c
+  - id: hello.py
+    original: hello.py
+    annotated: pca/annotated/hello.py
+    log: pca/logs/hello.py.log
+    pseudo: pca/pseudo/hello.py.md
+    spec: openspec/specs/hello-world-bridge/hello.py.spec.md
+    capabilities:
+      - hello-world-bridge
+    mode: auto
+    symbols:
+      __main__:
+        pseudoAnchor: '## __main__'
+        markerLine: 3
+    provisional: []
+    hashes:
+      original: sha256:d00c1050ffbfb1c5626f905e79390e1c563e5b66373ddb9252d6d2fba499bb44
+      annotated: sha256:35f8ad022695dc07f9fe50c8d06cb37fbb80af7f3ef70dc4c55bf1c6b6b9b0f0
+    annotateTemplateHash: sha256:8e98c0692f67d88f56461f4d87f5d933cbb756d91cef714ed3c8798acf0fa0f3
+    lastOp: pseudocode
+    syncedAt: '2026-07-23T19:20:08Z'
+    pendingChange: null
+    pseudocodeTemplateHash: sha256:0807114495d0087ebd2737cbd63bc3661339a841c8006a0bd7bdada72f323a9c
